@@ -143,18 +143,56 @@ python inference_video.py --labelmap_path label_map.pbtxt --model_path experimen
 ### Project overview
 This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
 
+The objetive of this project is train, validate and perform some interactions learned in this session using data from a camera located in a road-car provided by Waymo dataset. 
+
 ### Set up
 This section should contain a brief description of the steps to follow to run the code for this repository.
 
 ### Dataset
 #### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+
+The dataset has many images of vehicles, roads, and others that might be encountered on a car trip, as can be seen in the image below in a sample of 10 images:
+
+![image](https://user-images.githubusercontent.com/39452483/193482108-37b7bfb0-e466-4c77-86df-95d67c8cf0fb.png)
+
+
+From a sample of 200 images I extracted the frequency of the classes cars, bicycles and pedestrians. It can be clearly seen that the class with the highest frequency is cars.
+
+![image](https://user-images.githubusercontent.com/39452483/193482207-7015724b-6cd2-42ad-b3b6-31d2a6b47739.png)
+
 #### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+With such a large number of images, it is possible to use a small portion of the images to perform the cross-validation. This is why I chose the following percentages: 
+
+- Training: 70%
+- Validation: 20%
+- Testing: 10%
+
 
 ### Training
 #### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+
+![image](https://user-images.githubusercontent.com/39452483/193482401-83f5fc4e-ac50-47be-96ac-568a84a86315.png)
+
+The image above makes it possible to notice how the loss does not reach a value as close to zero as we would like. Therefore, we can say that it can be improved. It is important to note that in the first attempt, by using only the 2500 epochs that were originally in the file, it was too far from reaching the limit of the model, that's why I just added a new 0 to the model epochs.
+![image](https://user-images.githubusercontent.com/71234974/191393310-c00f8504-e865-468d-96ba-c366267aef9e.png)
+
+And if we check using the generated animation, it can be noticed more clearly:
+
+![animation_pre_config](animation1.gif)
+
 
 #### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+
+Changes were stored on the new pipeline file (see [new_pipeline](experiments/solution/pipeline_new.config)): 
+
+By making the relevant changes, you can notice the drastic change in detections:
+
+![animation_full](animation.gif)
+
+1. Using the data augmentation we added cases with variation of lightness and color to prevent scenarios where the illumination is different. `random_adjust_brightness` and `random_distort_color`.
+2. Using the data augmentation a scaling was done to avoid the failure of near or far object detections. `random_image_scale`.
+3. The learning rate was changed, since the loss gain was too high.
+
+Training was conducted again over 25000 epochs and results improved significantly: 
+
+![image](https://user-images.githubusercontent.com/39452483/193483060-5018a105-41e9-49b9-8eee-2196387c8dab.png)
