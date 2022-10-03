@@ -189,10 +189,9 @@ By making the relevant changes, you can notice the drastic change in detections:
 
 ![animation_full](animation.gif)
 
-1. Using the data augmentation we added cases with variation of lightness and color to prevent scenarios where the illumination is different. `random_adjust_brightness` and `random_distort_color`.
+1. Using the data augmentation we added cases with variations of lightness and color to prevent scenarios where the illumination is different. `random_adjust_brightness` and `random_distort_color`.
 2. Using the data augmentation a scaling was done to avoid the failure of near or far object detections. `random_image_scale`.
-3. The learning rate was changed, since the loss gain was too high.
-
-Training was conducted again over 25000 epochs and results improved significantly: 
+3. The learning rate was changed since the loss gain was too high.
+4. As before, the 25,000 epochs were maintained.
 
 ![image](https://user-images.githubusercontent.com/39452483/193483060-5018a105-41e9-49b9-8eee-2196387c8dab.png)
